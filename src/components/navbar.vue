@@ -46,6 +46,7 @@ const links = ref([
   { name: '图集', path: '/gallery' },
   { name: '留言板', path: '/message' },
   { name: 'AI对话', path: '/talk' },
+  { name: '凡人修仙', path: '/story' },
   { name: '网盘资源区', path: '/resources' }
 ]);
 

@@ -57,7 +57,7 @@
         <h3>批量上传图片</h3>
         <div class="tip-container">
           <ul class="tips-list">
-            <li>审核规则：1.不要 AI 图 2.不要色情倾向 3.要我能认出是惠惠。</li>
+            <li>审核规则：1.不要 AI 图 2.不要色情倾向 3.要我能认出是韩立。</li>
             <li>
               由于没有用户系统，我这边不好做审核反馈，但只要显示上传成功，我这边肯定能收到。
             </li>
@@ -171,7 +171,7 @@ const page = 1;
 const pageSize = 99;
 
 const fetchRanking = async () => {
-  const res = await getRankingList({ page, pageSize, character_key: "hui" });
+  const res = await getRankingList({ page, pageSize, character_key: "hanLi" });
   if (res.success) {
     rankingList.value = res.data;
   } else {
@@ -218,7 +218,7 @@ async function loadNextPage() {
       page: pageImage.value,
       limit: limit.value,
       sortBy: sortBy.value,
-      character_key: "hui",
+      character_key: "hanLi",
       order: order.value,
     });
     const likedIds = getLikedIds();
@@ -379,7 +379,7 @@ async function submitUpload() {
     const res = await uploadImages(
       selectedFiles.value,
       nickname.value.trim(),
-      "hui"
+      "hanLi"
     );
     const uploadedCount = res.data.length;
     // 更新 localStorage
@@ -934,158 +934,217 @@ $highlight: #ffd700;
 
 
 
+  /* 韩立风格上传弹窗（嵌套 SCSS，颜色写死） */
   .upload-modal-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(50, 40, 35, 0.85); // 柔和棕咖背景
+    background: rgba(7, 10, 8, 0.88);
+    /* 深沉夜色遮罩 */
     backdrop-filter: blur(6px);
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 2000;
-  }
+    padding: 20px;
 
-  .upload-modal {
-    background: rgba(255, 250, 245, 0.95); // 米白暖色底
-    padding: 36px;
-    border-radius: 18px;
-    width: 660px;
-    color: #5c4a3d; // 深棕文字
-    box-shadow: 0 12px 40px rgba(90, 70, 60, 0.3);
-    border: 1px solid rgba(200, 180, 160, 0.4);
-    position: relative;
-    font-family: "Helvetica Neue", sans-serif;
+    .upload-modal {
+      width: 660px;
+      background: linear-gradient(180deg, #efe6d8 0%, #efe1c0 100%);
+      /* 古纸底 */
+      padding: 36px;
+      border-radius: 18px;
+      color: #0b0b0b;
+      /* 墨色文字 */
+      box-shadow: 0 22px 60px rgba(2, 6, 5, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(11, 26, 24, 0.06);
+      position: relative;
+      font-family: "STKaiti", "KaiTi", "PingFang SC", "Noto Sans SC", "Helvetica Neue", sans-serif;
 
-    h3 {
-      margin-bottom: 16px;
-      font-size: 1.6rem;
-      color: #c78f7b; // 奶茶粉标题
-      text-align: center;
-      text-shadow: 0 0 4px rgba(230, 200, 180, 0.4);
-    }
-
-    .stats {
-      margin: 20px 0;
-      font-size: 1rem;
-      text-align: center;
-
-      strong {
-        color: #e6a5a0; // 淡粉
+      /* 纸纹 / 符印水印（极淡） */
+      &::before {
+        content: "";
+        position: absolute;
+        left: 18px;
+        top: 18px;
+        width: 120px;
+        height: 120px;
+        background: radial-gradient(circle at 30% 30%, rgba(11, 26, 24, 0.02), transparent 30%),
+          radial-gradient(circle at 70% 70%, rgba(214, 176, 106, 0.02), transparent 30%);
+        transform: rotate(-8deg);
+        pointer-events: none;
+        opacity: 0.85;
       }
-    }
 
-    .tip-container {
-      margin-top: 20px;
-      padding: 16px 20px;
-      background: rgba(230, 200, 180, 0.15);
-      border-left: 4px solid #c78f7b;
-      border-radius: 8px;
+      /* 右上小符印（圆章）*/
+      &::after {
+        content: "韩";
+        position: absolute;
+        right: 18px;
+        top: 18px;
+        width: 40px;
+        height: 40px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 14px;
+        color: #0b0b0b;
+        background: linear-gradient(180deg, #f7edd6 0%, #efe1c0 100%);
+        /* 符纸 */
+        border-radius: 6px;
+        border: 1px solid rgba(11, 26, 24, 0.12);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2), 0 0 12px rgba(214, 176, 106, 0.06);
+        pointer-events: none;
+      }
 
-      .tips-list {
-        list-style: none;
-        margin: 0;
-        padding: 0;
+      h3 {
+        margin: 0 0 16px 0;
+        font-size: 1.6rem;
+        color: #d6b06a;
+        /* 金色标题 */
+        text-align: center;
+        font-family: "STKaiti", "KaiTi", serif;
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.55), 0 0 8px rgba(214, 176, 106, 0.05);
+      }
 
-        li {
-          position: relative;
-          padding-left: 28px;
-          margin-bottom: 10px;
+      .stats {
+        margin: 18px 0;
+        font-size: 1rem;
+        text-align: center;
+        color: #2b2b27;
+
+        strong {
+          color: #c28b63;
+          /* 暖金数字 */
+        }
+      }
+
+      label {
+        display: block;
+        margin-bottom: 18px;
+        font-size: 0.95rem;
+        color: #2b2b27;
+
+        input[type="text"],
+        input[type="file"] {
+          width: 100%;
+          margin-top: 8px;
+          padding: 10px 12px;
+          border-radius: 8px;
+          border: 1px solid #bfa887;
+          /* 暗金边 */
+          background: rgba(255, 255, 250, 0.96);
+          color: #2b2b27;
           font-size: 0.95rem;
-          color: #5c4a3d;
+          outline: none;
+          transition: border-color 0.18s, box-shadow 0.18s;
 
-          &::before {
-            content: "♡";
-            position: absolute;
-            left: 0;
-            top: 0;
-            font-size: 1.1rem;
-            color: #c78f7b;
-            text-shadow: 0 0 2px rgba(200, 160, 140, 0.4);
-          }
-
-          &:last-child {
-            margin-bottom: 0;
+          &:focus {
+            border-color: #d6b06a;
+            /* 焦点金色 */
+            box-shadow: 0 0 8px rgba(214, 176, 106, 0.12);
           }
         }
       }
-    }
 
-    .tip {
-      margin-top: 10px;
-      text-align: right;
-      font-size: 0.9rem;
-      color: #7a6254;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 20px;
-      font-size: 0.95rem;
-
-      input[type="text"],
-      input[type="file"] {
-        width: 100%;
-        margin-top: 8px;
-        padding: 10px 12px;
+      .tip-container {
+        margin-top: 12px;
+        padding: 14px 18px;
+        background: linear-gradient(180deg, rgba(214, 176, 106, 0.05), rgba(214, 176, 106, 0.03));
+        border-left: 4px solid #d6b06a;
         border-radius: 8px;
-        border: 1px solid #c0a890;
-        background: rgba(255, 255, 255, 0.9);
-        color: #5c4a3d;
-        font-size: 0.95rem;
-        outline: none;
-        transition: border-color 0.2s, box-shadow 0.2s;
+        color: #2b2b27;
 
-        &:focus {
-          border-color: #e6a5a0;
-          box-shadow: 0 0 6px rgba(230, 165, 160, 0.4);
+        .tips-list {
+          list-style: none;
+          margin: 0;
+          padding: 0;
+
+          li {
+            position: relative;
+            padding-left: 28px;
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+            color: #3a352f;
+
+            &::before {
+              content: "符";
+              position: absolute;
+              left: 0;
+              top: 0;
+              font-size: 1rem;
+              color: #b36f4f;
+              /* 暖棕符号 */
+              text-shadow: 0 0 2px rgba(0, 0, 0, 0.12);
+            }
+
+            &:last-child {
+              margin-bottom: 0;
+            }
+          }
         }
       }
-    }
 
-    .modal-actions {
-      display: flex;
-      justify-content: flex-end;
-      gap: 16px;
-      margin-top: 30px;
+      .tip {
+        margin-top: 12px;
+        text-align: right;
+        font-size: 0.9rem;
+        color: #5c4a3d;
+      }
 
-      button {
-        padding: 12px 24px;
-        border: none;
-        border-radius: 24px;
-        cursor: pointer;
-        font-weight: bold;
-        font-size: 0.95rem;
-        transition: background 0.3s, box-shadow 0.3s;
+      .modal-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 16px;
+        margin-top: 30px;
 
-        &:not(.cancel) {
-          background: linear-gradient(135deg, #f3d6c6, #c78f7b); // 米粉渐变
-          color: #fff8f5;
-          box-shadow: 0 6px 20px rgba(200, 160, 140, 0.4);
+        button {
+          padding: 12px 24px;
+          border: none;
+          border-radius: 24px;
+          cursor: pointer;
+          font-weight: 700;
+          font-size: 0.95rem;
+          transition: background 0.22s, box-shadow 0.22s, transform 0.14s;
+          min-width: 110px;
 
-          &:hover:not(:disabled) {
-            background: linear-gradient(135deg, #e6a5a0, #b87b6a);
-            box-shadow: 0 8px 30px rgba(200, 140, 120, 0.5);
+          &:not(.cancel) {
+            /* 主按钮：暗玉 + 金色光泽 */
+            background: linear-gradient(135deg, #0f2b26 0%, #123a35 100%);
+            color: #fff7ea;
+            /* 淡米色字体 */
+            box-shadow: 0 10px 30px rgba(2, 6, 5, 0.6), 0 0 18px rgba(214, 176, 106, 0.06) inset;
+
+            &:hover:not(:disabled) {
+              background: linear-gradient(135deg, #123a35 0%, #0f2b26 100%);
+              transform: translateY(-3px);
+              box-shadow: 0 14px 36px rgba(2, 6, 5, 0.7), 0 0 28px rgba(214, 176, 106, 0.09) inset;
+            }
+
+            &:disabled {
+              background: #8f7d6f;
+              cursor: not-allowed;
+              box-shadow: none;
+              color: rgba(255, 247, 238, 0.7);
+            }
           }
 
-          &:disabled {
-            background: #c8b0a0;
-            cursor: not-allowed;
-            box-shadow: none;
-          }
-        }
+          &.cancel {
+            background: transparent;
+            border: 2px solid #bfa887;
+            /* 暗金边 */
+            color: #5c4a3d;
 
-        &.cancel {
-          background: transparent;
-          border: 2px solid #b89f8e;
-          color: #7a6254;
-
-          &:hover {
-            background: rgba(200, 160, 140, 0.15);
+            &:hover {
+              background: rgba(191, 168, 135, 0.08);
+              transform: translateY(-2px);
+            }
           }
         }
       }
     }
   }
+
 
   /* 韩立风格：上传排行榜（嵌套 SCSS，颜色写死） */
   .ranking-panel {
@@ -1121,6 +1180,7 @@ $highlight: #ffd700;
       cursor: pointer;
       padding-bottom: 10px;
       margin-bottom: 6px;
+
       .ranking-title {
         font-size: 1.12rem;
         margin: 0;
@@ -1134,7 +1194,7 @@ $highlight: #ffd700;
         position: relative;
         padding-left: 6px;
 
-     
+
       }
 
       .toggle-icon {
@@ -1214,9 +1274,6 @@ $highlight: #ffd700;
           font-size: 0.92rem;
           color: #2b2b27;
           text-shadow: 0 0 2px rgba(255, 255, 255, 0.6);
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
         }
 
         .count {
