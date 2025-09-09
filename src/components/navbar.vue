@@ -18,6 +18,9 @@
             :aria-current="isActive(item.path) ? 'page' : undefined">{{ item.name
             }}</router-link>
         </li>
+        <li>
+          <a href="http://slty.site/#/redirector" class="link" target="_blank"> 总站</a>
+        </li>
       </ul>
     </div>
 
@@ -31,7 +34,7 @@ import { ref, onMounted, onUnmounted, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { io } from "socket.io-client";
 
-const siteId = "hui";
+const siteId = "hanLi";
 const onlineCount = ref<number | null>(null);
 const socket = io("http://1.94.189.79:3000", { query: { siteId } });
 
@@ -46,8 +49,8 @@ const links = ref([
   { name: '图集', path: '/gallery' },
   { name: '留言板', path: '/message' },
   { name: 'AI对话', path: '/talk' },
-  { name: '凡人修仙', path: '/story' },
-  { name: '网盘资源区', path: '/resources' }
+  //  { name: '凡人修仙', path: '/story' },
+  //  { name: '网盘资源区', path: '/resources' }
 ]);
 
 const route = useRoute();

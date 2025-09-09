@@ -1,5 +1,7 @@
 <template>
   <main class="bio-simple" role="main" aria-labelledby="page-title">
+    <div class="threeDom" ref="threeRef"></div>
+
     <!-- 顶部卡片：基本信息（简洁） -->
     <section class="card basic" id="basic">
       <div class="basic-inner">
@@ -103,7 +105,8 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { ref, onMounted, onUnmounted, onBeforeUnmount } from 'vue';
+import threeInit from './threeInit/threeBg';
 
 const year = new Date().getFullYear();
 
@@ -311,16 +314,40 @@ function expandAll() {
 function collapseAll() {
   document.querySelectorAll('.timeline-list details').forEach((d: Element) => (d as HTMLDetailsElement).open = false);
 }
+
+
+const threeRef = ref<HTMLElement | null>(null);
+let bgHandle: { cleanup?: () => void } | null = null;
+
+onMounted(() => {
+  bgHandle = threeInit(threeRef);
+});
+
+onBeforeUnmount(() => {
+  if (bgHandle && typeof bgHandle.cleanup === 'function') {
+    bgHandle.cleanup();
+    bgHandle = null;
+  }
+});
 </script>
 
 <style lang="scss" scoped>
 .bio-simple {
   min-height: 100vh;
-  background: linear-gradient(180deg, #061221 0%, #08141a 100%);
   color: #f4efe4;
   font-family: Inter, "Noto Sans SC", system-ui, -apple-system, "Segoe UI", Roboto, Arial;
   padding: 1.2rem;
   padding-top: 80px;
+
+  .threeDom {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    width: 100%;
+    height: 100%;
+  }
+
 }
 
 .card {
@@ -433,6 +460,7 @@ function collapseAll() {
       padding: 0.36rem 0;
       border-bottom: 1px dashed rgba(255, 255, 255, 0.02);
       flex-direction: column;
+
       .age {
         color: #d4b35a;
         min-width: 5.2rem;

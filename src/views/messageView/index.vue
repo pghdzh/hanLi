@@ -1,5 +1,6 @@
 <template>
   <div class="megumi-message-board" aria-live="polite">
+    <div class="threeDom" ref="threeRef"></div>
 
     <!-- 半透明顶部标题 -->
     <header class="board-header" role="banner">
@@ -34,7 +35,7 @@
                 <div class="message-time">{{ formatTime(msg.created_at) }}</div>
               </div>
             </div>
-       
+
           </div>
 
           <p class="message-content">{{ msg.content }}</p>
@@ -48,8 +49,8 @@
       <input id="mb-name" v-model="name" type="text" placeholder="你的昵称" @keydown.enter.prevent />
 
       <label class="sr-only" for="mb-content">留言内容</label>
-      <textarea id="mb-content" v-model="content" placeholder="写下你的留言..."
-        @keydown.ctrl.enter.prevent="submitMessage" @input="autoGrow" ref="textareaRef" />
+      <textarea id="mb-content" v-model="content" placeholder="写下你的留言..." @keydown.ctrl.enter.prevent="submitMessage"
+        @input="autoGrow" ref="textareaRef" />
 
       <div class="form-row">
         <div class="hint">按 <kbd>Ctrl</kbd> + <kbd>Enter</kbd> 快捷发送</div>
@@ -64,8 +65,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, nextTick } from 'vue';
+import { ref, onMounted, nextTick, onBeforeUnmount } from 'vue';
 import { getMessageList, createMessage } from '@/api/modules/message';
+import threeInit from './threeInit/threeBg';
 
 const messages = ref<any[]>([]);
 const name = ref(localStorage.getItem('megumi_name') || '');
@@ -136,11 +138,23 @@ const autoGrow = (e?: Event) => {
   ta.style.height = h + 'px';
 };
 
+const threeRef = ref<HTMLElement | null>(null);
+let bgHandle: { cleanup?: () => void } | null = null;
+
+
 onMounted(() => {
   fetchMessages();
   // ensure textarea autosize initial
   nextTick(() => autoGrow());
+  bgHandle = threeInit(threeRef);
 });
+onBeforeUnmount(() => {
+  if (bgHandle && typeof bgHandle.cleanup === 'function') {
+    bgHandle.cleanup();
+    bgHandle = null;
+  }
+});
+
 </script>
 
 <style scoped lang="scss">
@@ -151,12 +165,20 @@ onMounted(() => {
   padding-top: 92px;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(180deg, #0b1412 0%, #07100e 40%, #03110f 100%);
   /* 夜色底，衬出内层古纸 */
   font-family: "STKaiti", "KaiTi", "PingFang SC", "Noto Sans SC", "Helvetica Neue", Arial, sans-serif;
   color: #efe6d8;
   /* 古纸文字色，页面主要文字可在局部覆盖为墨色 */
   overflow: hidden;
+
+  .threeDom {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    width: 100%;
+    height: 100%;
+  }
 
   /* 半透明顶部标题（改为古纸牌匾风） */
   .board-header {
@@ -295,7 +317,7 @@ onMounted(() => {
       box-shadow: 0 18px 44px rgba(2, 6, 5, 0.46), 0 0 18px rgba(214, 176, 106, 0.06) inset;
     }
 
-  
+
 
     .message-meta {
       display: flex;
@@ -344,7 +366,7 @@ onMounted(() => {
         }
       }
 
-     
+
     }
 
     .message-content {

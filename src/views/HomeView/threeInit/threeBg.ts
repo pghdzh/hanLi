@@ -39,7 +39,7 @@ export default (threeRef: any) => {
   renderer.setPixelRatio(DPR);
   renderer.setSize(window.innerWidth, window.innerHeight, false);
   renderer.setClearColor(0x000000, 0); // 透明背景
-  renderer.outputEncoding = THREE.sRGBEncoding;
+  renderer.outputEncoding = THREE.SRGBColorSpace;
 
   // 放在页面后面但不太极端，避免被其他负 z-index 组件覆盖
 
@@ -161,7 +161,7 @@ export default (threeRef: any) => {
     tex.minFilter = THREE.LinearFilter;
     tex.magFilter = THREE.LinearFilter;
     tex.generateMipmaps = false;
-    tex.encoding = THREE.sRGBEncoding;
+    tex.encoding = THREE.SRGBColorSpace;
     return tex;
   }
 
