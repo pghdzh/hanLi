@@ -30,6 +30,10 @@ const router = createRouter({
       path: "/story",
       component: () => import("@/views/storyView/index.vue"),
     },
+    {
+      path: "/resources",
+      component: () => import("@/views/resourcesView/index.vue"),
+    },
   ],
   scrollBehavior() {
     return { top: 0 };

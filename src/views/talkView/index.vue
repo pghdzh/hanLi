@@ -113,10 +113,10 @@ import {
 } from "vue";
 import { sendMessageToHui } from "@/api/deepseekApi";
 
-const STORAGE_KEY = "hui_chat_log";
+const STORAGE_KEY = "hanLi_chat_log";
 
 // 本地存储键名
-const STORAGE_STATS_KEY = "hui_chat_stats";
+const STORAGE_STATS_KEY = "hanli_chat_stats";
 const showModal = ref(false);
 // Stats 类型声明，确保所有字段都有默认值
 interface Stats {
