@@ -32,7 +32,7 @@
 
                     <label>
                         出身
-                        <input v-model="preset.birthplace" type="text" placeholder="例如：回龙镇孤儿" />
+                        <input v-model="preset.birthplace" type="text" placeholder="例如：世家长子" />
                     </label>
 
                     <div class="row">
