@@ -90,10 +90,10 @@
       </div>
     </div>
 
-    <div class="floating-chibis">
+    <!-- <div class="floating-chibis">
       <img v-for="(pet, i) in chibiList" :key="i" :src="pet.src" :style="{ top: pet.top + 'px', left: pet.left + 'px' }"
         class="chibi-img" />
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -101,7 +101,7 @@
 import { ref, onMounted, computed, nextTick, onBeforeUnmount } from "vue";
 import { uploadImages } from "@/api/modules/images"; // 前面封装的上传接口
 import { getRankingList } from "@/api/modules/ranking"; // 根据你的实际路径调整
-import { gsap } from "gsap"; // ← 本地引入
+//import { gsap } from "gsap"; // ← 本地引入
 import { getImagesLikesList, likeImage } from "@/api/modules/imagesLikes";
 import { debounce } from "lodash";
 
