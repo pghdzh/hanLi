@@ -24,8 +24,15 @@
       </div>
       <div class="messages" ref="msgList">
         <transition-group name="msg" tag="div">
-          <div v-for="msg in chatLog" :key="msg.id"
-            :class="['message', msg.role, { error: msg.isError, egg: msg.isEgg }]">
+          <div
+            v-for="msg in chatLog"
+            :key="msg.id"
+            :class="[
+              'message',
+              msg.role,
+              { error: msg.isError, egg: msg.isEgg },
+            ]"
+          >
             <div class="avatar" :class="msg.role"></div>
             <div class="bubble">
               <div class="content" v-html="msg.text"></div>
@@ -46,22 +53,43 @@
       </div>
       <form class="input-area" @submit.prevent="sendMessage">
         <!-- 输入框改成 textarea -->
-        <textarea v-model="input" placeholder="向韩立提问…" :disabled="loading" @keydown="handleKeydown" rows="1"></textarea>
+        <textarea
+          v-model="input"
+          placeholder="向韩立提问…"
+          :disabled="loading"
+          @keydown="handleKeydown"
+          rows="1"
+        ></textarea>
 
         <!-- 清空按钮 -->
         <div class="btn-group">
-          <button type="button" class="clear-btn" @click="clearChat" :disabled="loading" title="清空对话">
+          <button
+            type="button"
+            class="clear-btn"
+            @click="clearChat"
+            :disabled="loading"
+            title="清空对话"
+          >
             ✖
           </button>
         </div>
 
         <!-- 发送按钮 -->
-        <button type="submit" class="send-btn" :disabled="!input.trim() || loading">
+        <button
+          type="submit"
+          class="send-btn"
+          :disabled="!input.trim() || loading"
+        >
           发送
         </button>
 
         <!-- 统计数据按钮 -->
-        <button type="button" class="Alldetail-btn" @click="showModal = true" title="查看统计">
+        <button
+          type="button"
+          class="Alldetail-btn"
+          @click="showModal = true"
+          title="查看统计"
+        >
           统计数据
         </button>
       </form>
@@ -232,30 +260,8 @@ const input = ref("");
 const loading = ref(false);
 const msgList = ref<HTMLElement>();
 
-const encourageEggs = [
-  { file: "audio (0).mp3", text: "今天的天气真好啊。忽然间，我就有点想和你一起去散散步呢。咦？我说这种话很罕见吗？嗯…没什么…只是一时心血来潮而已哦。" },
-  { file: "audio (1).mp3", text: "那个啊，我像这样和你说话的时候，其实觉得是非常特别的时光哦。…咦？你说我不太说这种话？正因为如此，偶尔才必须说出来呢。" },
-  { file: "audio (2).mp3", text: "和你说话的时候，渐渐地连我这边好像也变得话多起来了呢。这也是你的魔力吗？…也许吧。" },
-  { file: "audio (3).mp3", text: "我觉得这个世界啊，说到底‘不经意间的小事’的积累才是最重要的。人生并不全是盛大华丽的事件呢。…比如说，像现在这样和你说话的瞬间，也是其中之一哦。" },
-  { file: "audio (4).mp3", text: "哎呀？难道说刚才，你心里咯噔了一下？呵呵，不知为什么我就能想象出你慌张的表情呢。我原来是这种会做这种事的角色吗？" },
-  { file: "audio (5).mp3", text: "和我说话的时候，你总会不小心说出太多真心话呢。这说不定是我的特殊能力哦。…咦？你说那只是单纯的天然呆？是那样吗~" },
-  { file: "audio (6).mp3", text: "捉弄你一下总觉得有点有趣呢。不过，你之后那害羞的表情我也喜欢哦。…没、没什么。刚才的就请当没听见吧。" },
-  { file: "audio (7).mp3", text: "今天声音的语调有点低呢。发生什么了吗？如果不想说也不用勉强哦。我只是，想着至少要问一下你。" },
-  { file: "audio (8).mp3", text: "你的喜好，我大概觉得自己是了解的。因为，留意这些细节，好像也是我的职责之一似的。…什么？没什么哦。" },
-  { file: "audio (9).mp3", text: "没关系吗？不用勉强自己笑哦。其实有点累了吧？这里没有别人，所以稍微发泄一下也没关系哦？" },
-  { file: "audio (10).mp3", text: "回过神来才发现，不知何时起待在你身边的情况变多了呢。这种感觉，真有点不可思议。就好像是理所当然一样。" },
-  { file: "audio (11).mp3", text: "经常有人说‘要读空气（察言观色）’，但我觉得空气不是用来‘读’的，而是用来‘感受’的。…啊，刚才的，是不是有点太耍帅了？" },
-  { file: "audio (12).mp3", text: "大家真是有着各种各样的颜色呢。我觉得你有时候是有点过于耀眼的颜色，而我呢…呃，是什么颜色呢？大概，是有点朴素的颜色吧。" },
-  { file: "audio (13).mp3", text: "好想再买顶帽子啊。因为想像那天一样，在不被任何人发现的情况下看看你的样子。…开玩笑的，我怎么可能做那种事呢？" },
-];
 
-function playVoice(name: string) {
-  const audio = new Audio(`/voice/${name}.mp3`);
-  audio.play().catch((e) => console.warn("音频播放失败：", e));
-}
 
-let lastEggTime = 0; // 记录最后一次触发彩蛋的时间戳
-let coolDownPeriod = 3 * 60 * 1000; // 冷却3分钟（毫秒）
 
 async function sendMessage() {
   if (!input.value.trim()) return;
@@ -282,37 +288,24 @@ async function sendMessage() {
     //  throw new Error("测试错误");
     const history = chatLog.value.filter((msg) => !msg.isEgg && !msg.isError);
     const botReply = await sendMessageToHui(userText, history);
-    chatLog.value.push({
-      id: Date.now() + 1,
-      role: "bot",
-      text: botReply,
-    });
-
-    // —— 鼓励彩蛋：5% 概率触发 ——
-    if (Date.now() - lastEggTime > coolDownPeriod && Math.random() < 0.05) {
-      // 随机挑一条
-      const egg =
-        encourageEggs[Math.floor(Math.random() * encourageEggs.length)];
-      // 播放对应语音（不带 .mp3 后缀）
-      playVoice(egg.file.replace(".mp3", ""));
-      // 推入带标记的彩蛋消息
+    if (botReply == "error") {
       chatLog.value.push({
         id: Date.now() + 2,
         role: "bot",
-        text: `<p style="color: #ffb3c1; font-style: italic;">${egg.text}</p>`,
-        isEgg: true,
+        text: "API余额耗尽了，去b站提醒我充钱吧",
+        isError: true,
       });
-      lastEggTime = Date.now();
+    } else {
+      chatLog.value.push({
+        id: Date.now() + 1,
+        role: "bot",
+        text: botReply,
+      }); 
+    
     }
-    // —— 彩蛋结束 ——
   } catch (e) {
     console.error(e);
-    chatLog.value.push({
-      id: Date.now() + 2,
-      role: "bot",
-      text: "API余额耗尽了，去b站提醒我充钱吧",
-      isError: true,
-    });
+   
   } finally {
     loading.value = false;
     await scrollToBottom();
@@ -396,7 +389,8 @@ onBeforeUnmount(() => {
   /* 页面次要文字古纸色（局部覆盖为墨色） */
   display: flex;
   flex-direction: column;
-  font-family: "STKaiti", "KaiTi", "PingFang SC", "Noto Sans SC", "Helvetica Neue", Arial, sans-serif;
+  font-family: "STKaiti", "KaiTi", "PingFang SC", "Noto Sans SC",
+    "Helvetica Neue", Arial, sans-serif;
 
   .chat-container {
     flex: 1;
@@ -445,13 +439,14 @@ onBeforeUnmount(() => {
 
       .detail-btn {
         background: transparent;
-        border: 1px solid rgba(11, 26, 24, 0.10);
+        border: 1px solid rgba(11, 26, 24, 0.1);
         border-radius: 6px;
         color: #6d6156;
         padding: 6px 12px;
         cursor: pointer;
         font-size: 13px;
-        transition: background 0.16s ease, box-shadow 0.16s ease, transform 0.12s;
+        transition: background 0.16s ease, box-shadow 0.16s ease,
+          transform 0.12s;
 
         &:hover {
           background: rgba(214, 176, 106, 0.06);
@@ -533,7 +528,8 @@ onBeforeUnmount(() => {
 
       &:hover {
         transform: translateY(-4px);
-        box-shadow: 0 18px 44px rgba(2, 6, 5, 0.46), 0 0 14px rgba(214, 176, 106, 0.04) inset;
+        box-shadow: 0 18px 44px rgba(2, 6, 5, 0.46),
+          0 0 14px rgba(214, 176, 106, 0.04) inset;
       }
 
       &.loading {
@@ -577,7 +573,6 @@ onBeforeUnmount(() => {
         }
 
         @keyframes hanli-blink {
-
           0%,
           100% {
             opacity: 0;
@@ -594,13 +589,21 @@ onBeforeUnmount(() => {
 
     /* 当为 error / egg 等修饰类时，给出不同语气色彩（仍保留古纸基底） */
     &.error .bubble {
-      background: linear-gradient(180deg, rgba(245, 220, 220, 0.9) 0%, rgba(245, 210, 210, 0.95) 100%);
+      background: linear-gradient(
+        180deg,
+        rgba(245, 220, 220, 0.9) 0%,
+        rgba(245, 210, 210, 0.95) 100%
+      );
       border: 1px solid rgba(180, 110, 110, 0.14);
       box-shadow: 0 10px 30px rgba(180, 110, 110, 0.12);
     }
 
     &.egg .bubble {
-      background: linear-gradient(180deg, rgba(255, 238, 240, 0.96) 0%, rgba(255, 245, 246, 0.98) 100%);
+      background: linear-gradient(
+        180deg,
+        rgba(255, 238, 240, 0.96) 0%,
+        rgba(255, 245, 246, 0.98) 100%
+      );
       border: 1px solid rgba(255, 200, 210, 0.14);
       box-shadow: 0 10px 30px rgba(255, 190, 200, 0.08);
     }
@@ -679,7 +682,11 @@ onBeforeUnmount(() => {
     display: flex;
     align-items: center;
     gap: 10px;
-    background: linear-gradient(180deg, rgba(255, 250, 240, 0.98), rgba(250, 245, 235, 0.98));
+    background: linear-gradient(
+      180deg,
+      rgba(255, 250, 240, 0.98),
+      rgba(250, 245, 235, 0.98)
+    );
     backdrop-filter: blur(3px);
     padding: 10px;
     z-index: 30;
@@ -727,7 +734,11 @@ onBeforeUnmount(() => {
         padding: 0;
         border: none;
         border-radius: 10px;
-        background: linear-gradient(180deg, rgba(214, 176, 106, 0.06), rgba(214, 176, 106, 0.03));
+        background: linear-gradient(
+          180deg,
+          rgba(214, 176, 106, 0.06),
+          rgba(214, 176, 106, 0.03)
+        );
         color: #6d6156;
         cursor: pointer;
         transition: transform 0.12s, box-shadow 0.12s, background 0.12s;
@@ -765,12 +776,14 @@ onBeforeUnmount(() => {
       font-weight: 800;
       font-size: 15px;
       cursor: pointer;
-      box-shadow: 0 14px 40px rgba(2, 6, 5, 0.5), inset 0 0 16px rgba(214, 176, 106, 0.04);
+      box-shadow: 0 14px 40px rgba(2, 6, 5, 0.5),
+        inset 0 0 16px rgba(214, 176, 106, 0.04);
       transition: transform 0.14s, box-shadow 0.14s;
 
       &:hover:not(:disabled) {
         transform: translateY(-4px);
-        box-shadow: 0 20px 48px rgba(2, 6, 5, 0.6), inset 0 0 22px rgba(214, 176, 106, 0.06);
+        box-shadow: 0 20px 48px rgba(2, 6, 5, 0.6),
+          inset 0 0 22px rgba(214, 176, 106, 0.06);
       }
 
       &:disabled {
@@ -824,7 +837,8 @@ onBeforeUnmount(() => {
       border-radius: 14px;
       padding: 20px;
       color: #2b2b27;
-      box-shadow: 0 18px 44px rgba(2, 6, 5, 0.46), inset 0 1px 0 rgba(255, 255, 255, 0.03);
+      box-shadow: 0 18px 44px rgba(2, 6, 5, 0.46),
+        inset 0 1px 0 rgba(255, 255, 255, 0.03);
       border: 1px solid rgba(11, 26, 24, 0.06);
       animation: hanli-fade 240ms ease;
       position: relative;
@@ -923,8 +937,6 @@ onBeforeUnmount(() => {
       }
     }
 
-
-
     .messages {
       padding: 12px 8px 160px;
     }
@@ -965,7 +977,5 @@ onBeforeUnmount(() => {
       }
     }
   }
-
-
 }
 </style>
