@@ -19,7 +19,7 @@
             }}</router-link>
         </li>
         <li>
-          <a href="http://slty.site/#/redirector" class="link" target="_blank"> 总站</a>
+          <a href="https://slty.site/#/redirector" class="link" target="_blank"> 总站</a>
         </li>
       </ul>
     </div>
@@ -36,7 +36,7 @@ import { io } from "socket.io-client";
 
 const siteId = "hanLi";
 const onlineCount = ref<number | null>(null);
-const socket = io("http://36.150.237.25:3000", { query: { siteId } });
+const socket = io(import.meta.env.VITE_API_BASE_URL, { query: { siteId } });
 
 const open = ref(false);
 const isScrolled = ref(false);
